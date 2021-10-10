@@ -39,7 +39,7 @@ setSlot(10, QuickItem.of(Material.APPLE).name("§cRandom apple"), inventoryClick
 
 ## Integration
 
-➠  To add this API to Gradle, juste add this in your `build.gradle`
+➠  To add this API to Gradle, just add this in your `build.gradle`
 ```gradle
 repositories {
   maven { url = 'https://repo.zorg-dev.fr/repository/releases/' } // QuickInventory
