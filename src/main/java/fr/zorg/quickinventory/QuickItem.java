@@ -3,6 +3,7 @@ package fr.zorg.quickinventory;
 import dev.dbassett.skullcreator.SkullCreator;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,10 +22,10 @@ public class QuickItem {
     /**
      * Creates a new {@link QuickItem}
      *
-     * @param material The {@link Material} of the {@link QuickItem}
+     * @param itemStack The {@link ItemStack} of the {@link QuickItem}
      */
-    public QuickItem(Material material) {
-        this.item = new ItemStack(material);
+    public QuickItem(ItemStack itemStack) {
+        this.item = itemStack;
         this.itemMeta = this.item.getItemMeta();
     }
 
@@ -35,7 +36,17 @@ public class QuickItem {
      * @return A new {@link QuickItem}
      */
     public static QuickItem of(Material material) {
-        return new QuickItem(material);
+        return new QuickItem(new ItemStack(material));
+    }
+
+    /**
+     * Creates a new {@link QuickItem}
+     *
+     * @param itemStack The {@link ItemStack} of the {@link QuickItem}
+     * @return A new {@link QuickItem}
+     */
+    public static QuickItem of(ItemStack itemStack) {
+        return new QuickItem(itemStack);
     }
 
     /**
@@ -225,6 +236,27 @@ public class QuickItem {
     public QuickItem resetEnchants() {
         this.itemMeta.getEnchants().forEach((enchantment, integer) -> this.itemMeta.removeEnchant(enchantment));
         return this;
+    }
+
+    /**
+     * Set the durability of the {@link QuickItem}
+     *
+     * @param durability The durability to set
+     * @return The {@link QuickItem}, useful for chaining
+     */
+    public QuickItem setDurability(int durability) {
+        this.item.setDurability((short) durability);
+        return this;
+    }
+
+    /**
+     * Set the durability of the {@link QuickItem}
+     *
+     * @param durability The durability to set
+     * @return The {@link QuickItem}, useful for chaining
+     */
+    public QuickItem durability(int durability) {
+        return this.setDurability(durability);
     }
 
     /**

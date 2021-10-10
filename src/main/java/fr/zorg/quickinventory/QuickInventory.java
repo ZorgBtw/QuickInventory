@@ -13,6 +13,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+/**
+ * QuickInventory API - By Zorg
+ * Extend this class to create a new GUI
+ *
+ * @author <a href="https://github.com/ZorgBtw">Zorg</a>
+ */
 public class QuickInventory implements InventoryHolder {
 
     private Inventory inventory;
@@ -37,6 +43,10 @@ public class QuickInventory implements InventoryHolder {
 
     public QuickInventory(InventoryType inventoryType, int size) {
         this(inventoryType, inventoryType.getDefaultTitle(), size);
+    }
+
+    public QuickInventory(String title, int size) {
+        this(InventoryType.CHEST, title, size);
     }
 
     /**
