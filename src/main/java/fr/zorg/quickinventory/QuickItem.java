@@ -1,18 +1,15 @@
 package fr.zorg.quickinventory;
 
-import dev.dbassett.skullcreator.SkullCreator;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class QuickItem {
 
@@ -170,7 +167,12 @@ public class QuickItem {
      * @return The {@link QuickItem}, useful for chaining
      */
     public QuickItem addLore(List<String> lore) {
-        this.itemMeta.getLore().addAll(lore);
+        List<String> itemLore = this.itemMeta.getLore();
+        if (itemLore == null)
+            itemLore = lore;
+        else
+            itemLore.addAll(lore);
+        this.itemMeta.setLore(itemLore);
         return this;
     }
 
@@ -305,12 +307,42 @@ public class QuickItem {
     /**
      * Set the value of a skull to its Base64 value
      *
-     * @param base64String The value "Value:" from a skull on <a href="https://minecraft-heads.com">minecraft-heads</a> skull
+     * @param base64 The value "Value:" from a skull on <a href="https://minecraft-heads.com">minecraft-heads</a> skull
      * @return The {@link QuickItem}, useful for chaining
      */
-    public QuickItem setBase64SkullValue(String base64String) {
-        if (this.item.getItemMeta() instanceof SkullMeta)
-            this.item = SkullCreator.itemWithBase64(this.item, base64String);
+    public QuickItem setBase64SkullValue(String base64) {
+        if (!(this.itemMeta instanceof SkullMeta))
+            return this;
+
+        try {
+            final SkullMeta skullMeta = ((SkullMeta) this.itemMeta);
+
+            final Object gameProfile = Class.forName("com.mojang.authlib.GameProfile")
+                    .getConstructor(UUID.class, String.class)
+                    .newInstance(UUID.randomUUID(), "");
+
+            final Object property = Class.forName("com.mojang.authlib.properties.Property")
+                    .getConstructor(String.class, String.class)
+                    .newInstance("texture", base64);
+
+            final Object propertyMap = gameProfile
+                    .getClass()
+                    .getMethod("getProperties")
+                    .invoke(gameProfile);
+
+            propertyMap
+                    .getClass()
+                    .getMethod("put", Object.class, Object.class)
+                    .invoke(propertyMap, "textures", property);
+
+            Field profileField = skullMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(skullMeta, gameProfile);
+
+            this.itemMeta = skullMeta;
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 
