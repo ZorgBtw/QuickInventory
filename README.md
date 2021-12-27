@@ -12,7 +12,7 @@ public class MainClass extends JavaPlugin {
     public void onEnable() {
         QuickInventoryManager.register(this);
     }
-    
+
 }
 ```
 
@@ -30,7 +30,7 @@ public class ExampleInventory extends QuickInventory {
 }
 ```
 
-➠  Run an action when an item in clicked
+➠  Run an action when an item is clicked
 ```java
 setSlot(10, QuickItem.of(Material.APPLE).name("§cRandom apple"), inventoryClickEvent -> {
     // Your action here
@@ -39,7 +39,7 @@ setSlot(10, QuickItem.of(Material.APPLE).name("§cRandom apple"), inventoryClick
 
 ## Integration
 
-➠  To add this API to Gradle, just add this in your `build.gradle`
+➠  To add this API to Gradle, juste add this in your `build.gradle`
 ```gradle
 repositories {
   maven { url = 'https://repo.zorg-dev.fr/repository/releases/' } // QuickInventory
@@ -49,10 +49,3 @@ dependencies {
   implementation group: 'fr.zorg', name: 'quickinventory', version: '1.0.0' // QuickInventory
 }
 ```
-
-## External libraries
-
-QuickInventory is using some external libraries, here's them:
-- SkullCreator:
-  - Author: <a href="https://github.com/deanveloper">deanveloper</a>
-  - Source: <a href="https://github.com/deanveloper/SkullCreator">SkullCreator</a>
